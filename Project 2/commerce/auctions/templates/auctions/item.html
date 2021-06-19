@@ -1,0 +1,66 @@
+{% extends 'auctions/layout.html' %} {% block body %}
+<div class="row">
+	<div class="col-md-8">
+		<div class="card mb-3" style="max-width: 940px">
+			<div class="row g-0">
+				<div class="col-md-7">
+					<img style="width: 550px; height: 400px" src="{{item.image}}" alt="..." />
+				</div>
+				<div class="col-md-5">
+					<div class="card-body">
+						<h5 class="card-title text-uppercase">{{item.title}}</h5>
+						<a href="" class="btn btn-primary">Add Watchlist</a>
+						<br />
+						<p class="card-text mt-2">
+							<span>Starting Price: $</span>{{item.bid}}<br />
+							<span>Current Price: $</span>{{item.current_bid}}<br /><br />
+							<span class="text-capitalize">{{item.description}}</span><br /><br />
+						</p>
+						<p class="card-text">
+							<small class="text-muted">Listed by {{item.user}} on {{item.time}}</small>
+						</p>
+						<form action="{% url 'bid' item.id %}" method="POST">
+							{%csrf_token%}
+							<div class="input-group mb-3">
+								<span class="input-group-text">$</span>
+								<input type="text" name="bid" class="form-control" aria-label="Amount (to the nearest dollar)" required />
+								<span class="input-group-text">.00</span>
+							</div>
+							<button type="submit" class="btn btn-success">$ Place Your Bid</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="card me-5">
+			<h5 class="card-header">Add Comments</h5>
+			<div class="card-body">
+				{% if user.is_authenticated %}
+				<form action="">
+					<div class="mb-3">
+						<input type="text" class="form-control" id="subject" placeholder="Subject" />
+					</div>
+					<div class="mb-3">
+						<textarea class="form-control" id="desc" rows="5" placeholder="Your message"></textarea>
+					</div>
+					<a href="#" class="btn btn-primary">Add Comment</a>
+				</form>
+				{% else %}
+				<p>Please <a href="{% url 'login' %}">Login</a> to comment.</p>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card">
+	<div class="card-header fs-4">List of Comments</div>
+	<br />
+	{% if user.is_authenticated %}
+	<div class="card-body m-3"></div>
+	{% else %}
+	<p class="m-2">Please <a href="{% url 'login' %}">Login</a> to view comments.</p>
+	{% endif %}
+</div>
+{% endblock body %}
